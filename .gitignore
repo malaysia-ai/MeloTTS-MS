@@ -10,3 +10,4 @@ build/
 *.zip
 *.wav
 *_symbol.txt
+melo/logs
