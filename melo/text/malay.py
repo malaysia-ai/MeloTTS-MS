@@ -62,7 +62,7 @@ def g2p(text, pad_start_end=True, tokenized=None):
                 else:
                     t = 0
                 tones.append(t)
-                phone_len += len(s)
+                phone_len += 1
         aaa = distribute_phone(phone_len, word_len)
         word2ph += aaa
 
@@ -73,7 +73,10 @@ def g2p(text, pad_start_end=True, tokenized=None):
     return phones, tones, word2ph
 
 def get_bert_feature(text, word2ph, device=None):
-    from text import malay_bert
+    try:
+        from text import malay_bert
+    except:
+        from melo.text import malay_bert
 
     return malay_bert.get_bert_feature(text, word2ph, device=device)
 
@@ -98,5 +101,5 @@ if __name__ == "__main__":
     '.',
     '_'],
     [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0],
-    [1, 5, 5, 5, 1, 1])
+    [1, 4, 4, 4, 1, 1])
     """
