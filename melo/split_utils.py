@@ -7,7 +7,7 @@ import torchaudio
 import re
 
 def split_sentence(text, min_len=10, language_str='EN'):
-    if language_str in ['EN', 'FR', 'ES', 'SP']:
+    if language_str in ['EN', 'FR', 'ES', 'SP', 'MS']:
         sentences = split_sentences_latin(text, min_len=min_len)
     else:
         sentences = split_sentences_zh(text, min_len=min_len)

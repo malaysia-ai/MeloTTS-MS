@@ -80,9 +80,12 @@ class TTS(nn.Module):
             print(" > ===========================")
         return texts
 
-    def tts_to_file(self, text, speaker_id, output_path=None, sdp_ratio=0.2, noise_scale=0.6, noise_scale_w=0.8, speed=1.0, pbar=None, format=None, position=None, quiet=False,):
+    def tts_to_file(self, text, speaker_id, output_path=None, sdp_ratio=0.2, noise_scale=0.6, noise_scale_w=0.8, speed=1.0, pbar=None, format=None, position=None, quiet=False, split=False):
         language = self.language
-        texts = self.split_sentences_into_pieces(text, language, quiet)
+        if split:
+            texts = self.split_sentences_into_pieces(text, language, quiet)
+        else:
+            texts = [text]
         audio_list = []
         if pbar:
             tx = pbar(texts)
