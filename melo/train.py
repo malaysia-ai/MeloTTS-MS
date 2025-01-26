@@ -172,12 +172,23 @@ def run():
     hps.pretrain_dur = hps.pretrain_dur or pretrain_dur
 
     if hps.pretrain_G:
+        print('load pretrained')
+        print(net_g)
         utils.load_checkpoint(
                 hps.pretrain_G,
                 net_g,
                 None,
                 skip_optimizer=True
             )
+
+        old_embeddings = net_g.module.enc_p.emb
+        net_g.module.enc_p.emb = net_g.module.get_resized_embeddings(old_embeddings, len(symbols))
+
+        old_embeddings = net_g.module.enc_p.tone_emb
+        net_g.module.enc_p.tone_emb = net_g.module.get_resized_embeddings(old_embeddings, 18)
+
+        print(net_g.module.enc_p.emb.weight.shape, net_g.module.enc_p.tone_emb.weight.shape)
+
     if hps.pretrain_D:
         utils.load_checkpoint(
                 hps.pretrain_D,
