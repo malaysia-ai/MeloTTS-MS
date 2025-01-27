@@ -111,9 +111,10 @@ def main(
 
         out_file = open(cleaned_path, 'w', encoding='utf-8')
         for f in glob(f'{cleaned_path}-part*'):
-                with open(f) as fopen:
-                    for line in fopen.readlines():
-                        out_file.write(line)
+            with open(f) as fopen:
+                for line in fopen.readlines():
+                    out_file.write(line)
+                    
         out_file.close()
 
         metadata = cleaned_path

@@ -50,7 +50,7 @@ def run():
     hps = utils.get_hparams()
     local_rank = int(os.environ["LOCAL_RANK"])
     dist.init_process_group(
-        backend="gloo",
+        backend="nccl",
         init_method="env://",  # Due to some training problem,we proposed to use gloo instead of nccl.
         rank=local_rank,
     )  # Use torchrun instead of mp.spawn
