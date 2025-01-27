@@ -17,7 +17,7 @@ The transcribed text can be obtained by ASR model, (e.g., [whisper](https://gith
 
 We can then run the preprocessing code:
 ```
-python preprocess_text.py --metadata data/example/metadata.list 
+python preprocess_text.py --metadata data/example/metadata.list --num_device <num_of_gpus>
 ```
 A config file `data/example/config.json` will be generated. Feel free to edit some hyper-parameters in that config file (for example, you may decrease the batch size if you have encountered the CUDA out-of-memory issue).
 
