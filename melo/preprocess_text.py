@@ -13,9 +13,16 @@ import itertools
 from multiprocess import Pool
 from text.symbols import symbols, num_languages, num_tones
 
-def chunks(l, n):
-    for i in range(0, len(l), n):
-        yield (l[i: i + n], i // n)
+def chunks(l, num_chunks):
+    chunk_size = len(l) // num_chunks
+    remainder = len(l) % num_chunks
+    start = 0
+    for i in range(num_chunks):
+        extra = 1 if i < remainder else 0
+        end = start + chunk_size + extra
+        yield (l[start:end], i)
+        start = end
+
 
 @click.command()
 @click.option(
@@ -57,13 +64,18 @@ def main(
 
     if clean:
         def loop(lines):
+            lines, index = lines
+            print(len(lines), index)
             os.environ['CUDA_VISIBLE_DEVICES'] = str(index)
 
-            lines, index = lines
             out_file = open(f'{cleaned_path}-part-{index}', 'w', encoding='utf-8')
             for line in tqdm(lines):
                 try:
                     utt, spk, language, text = line.strip().split("|")
+                    if os.path.exists('/workspace'):
+                        splitted = os.path.split(utt)
+                        new_folder = os.path.join('/workspace', os.path.split(splitted[0])[1])
+                        utt = os.path.join(new_folder, splitted[1])
                     norm_text, phones, tones, word2ph, bert = clean_text_bert(text, language, device='cuda')
 
                     assert len(phones) == len(tones)
@@ -85,15 +97,15 @@ def main(
                 except Exception as error:
                     print("err!", line, error)
 
-                out_file.close()
+            out_file.close()
 
         lines = []
         for line in tqdm(open(metadata, encoding="utf-8").readlines()):
             lines.append(line)
         
-        df_split = chunks(lines, len(lines) // num_device)
+        df_split = chunks(lines, num_device)
         pool = Pool(num_device)
-        pooled = pool.map(function, df_split)
+        pooled = pool.map(loop, df_split)
         pool.close()
         pool.join()
 

@@ -364,7 +364,11 @@ def hira2kata(text: str) -> str:
 
 _SYMBOL_TOKENS = set(list("・、。？！"))
 _NO_YOMI_TOKENS = set(list("「」『』―（）［］[]"))
-_TAGGER = MeCab.Tagger()
+
+try:
+    _TAGGER = MeCab.Tagger()
+except:
+    print('failed to load `MeCab.Tagger()`, Japanese model will not work')
 
 
 def text2kata(text: str) -> str:
