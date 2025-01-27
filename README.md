@@ -4,25 +4,34 @@
   <a href="https://trendshift.io/repositories/8133" target="_blank"><img src="https://trendshift.io/api/badge/repositories/8133" alt="myshell-ai%2FMeloTTS | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 </div>
 
+Original README at https://github.com/myshell-ai/MeloTTS
+
 ## Introduction
-MeloTTS is a **high-quality multi-lingual** text-to-speech library by [MIT](https://www.mit.edu/) and [MyShell.ai](https://myshell.ai). Supported languages include:
+MeloTTS MS is a forked of https://github.com/myshell-ai/MeloTTS to support Malay language.
 
-| Language | Example |
-| --- | --- |
-| English (American)    | [Link](https://myshell-public-repo-host.s3.amazonaws.com/myshellttsbase/examples/en/EN-US/speed_1.0/sent_000.wav) |
-| English (British)     | [Link](https://myshell-public-repo-host.s3.amazonaws.com/myshellttsbase/examples/en/EN-BR/speed_1.0/sent_000.wav) |
-| English (Indian)      | [Link](https://myshell-public-repo-host.s3.amazonaws.com/myshellttsbase/examples/en/EN_INDIA/speed_1.0/sent_000.wav) |
-| English (Australian)  | [Link](https://myshell-public-repo-host.s3.amazonaws.com/myshellttsbase/examples/en/EN-AU/speed_1.0/sent_000.wav) |
-| English (Default)     | [Link](https://myshell-public-repo-host.s3.amazonaws.com/myshellttsbase/examples/en/EN-Default/speed_1.0/sent_000.wav) |
-| Spanish               | [Link](https://myshell-public-repo-host.s3.amazonaws.com/myshellttsbase/examples/es/ES/speed_1.0/sent_000.wav) |
-| French                | [Link](https://myshell-public-repo-host.s3.amazonaws.com/myshellttsbase/examples/fr/FR/speed_1.0/sent_000.wav) |
-| Chinese (mix EN)      | [Link](https://myshell-public-repo-host.s3.amazonaws.com/myshellttsbase/examples/zh/ZH/speed_1.0/sent_008.wav) |
-| Japanese              | [Link](https://myshell-public-repo-host.s3.amazonaws.com/myshellttsbase/examples/jp/JP/speed_1.0/sent_000.wav) |
-| Korean                | [Link](https://myshell-public-repo-host.s3.amazonaws.com/myshellttsbase/examples/kr/KR/speed_1.0/sent_000.wav) |
+## Improvement
 
-Some other features include:
-- The Chinese speaker supports `mixed Chinese and English`.
-- Fast enough for `CPU real-time inference`.
+1. Use `ms` phonemizer and malaya speech normalizer, [melo/text/malay.py](melo/text/malay.py).
+2. Use Pretrained Malaysian BERT, [melo/text/malay_bert.py](melo/text/malay_bert.py).
+3. Extend symbols, [melo/text/symbols.py](melo/text/symbols.py).
+4. Use the official pretrained models after that extend the embedding size, [melo/train.py](melo/train.py),
+
+```python
+utils.load_checkpoint(
+  hps.pretrain_G,
+  net_g,
+  None,
+  skip_optimizer=True
+)
+
+old_embeddings = net_g.module.enc_p.emb
+net_g.module.enc_p.emb = net_g.module.get_resized_embeddings(old_embeddings, len(symbols))
+
+old_embeddings = net_g.module.enc_p.tone_emb
+net_g.module.enc_p.tone_emb = net_g.module.get_resized_embeddings(old_embeddings, 18)
+
+print(net_g.module.enc_p.emb.weight.shape, net_g.module.enc_p.tone_emb.weight.shape)
+```
 
 ## Usage
 - [Use without Installation](docs/quick_use.md)
