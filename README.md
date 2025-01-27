@@ -11,7 +11,7 @@ MeloTTS MS is a forked of https://github.com/myshell-ai/MeloTTS to support Malay
 
 ## Improvement
 
-1. Use `ms` phonemizer and malaya speech normalizer, [melo/text/malay.py](melo/text/malay.py).
+1. Use `ms` phonemizer and Malaya Speech normalizer, [melo/text/malay.py](melo/text/malay.py).
 2. Use Pretrained Malaysian BERT, [melo/text/malay_bert.py](melo/text/malay_bert.py).
 3. Extend symbols, [melo/text/symbols.py](melo/text/symbols.py).
 4. Use the official pretrained models after that extend the embedding size, [melo/train.py](melo/train.py),
