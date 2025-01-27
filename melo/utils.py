@@ -231,6 +231,10 @@ def load_wav_to_torch_new(full_path):
     return audio_norm, sampling_rate
 
 def load_wav_to_torch_librosa(full_path, sr):
+    if os.path.exists('/workspace'):
+        splitted = os.path.split(full_path)
+        new_folder = os.path.join('/workspace', os.path.split(splitted[0])[1])
+        full_path = os.path.join(new_folder, splitted[1])
     audio_norm, sampling_rate = librosa.load(full_path, sr=sr, mono=True)
     return torch.FloatTensor(audio_norm.astype(np.float32)), sampling_rate
 
