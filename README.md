@@ -7,7 +7,7 @@
 Original README at https://github.com/myshell-ai/MeloTTS
 
 ## Introduction
-MeloTTS MS is a forked of https://github.com/myshell-ai/MeloTTS to support Malay language.
+MeloTTS MS is a forked of https://github.com/myshell-ai/MeloTTS to support Malay language, models and checkpoints with optimizer states released at https://huggingface.co/mesolitica/MeloTTS-MS
 
 ## Improvement
 
