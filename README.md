@@ -11,10 +11,54 @@ MeloTTS MS is a forked of https://github.com/myshell-ai/MeloTTS to support Malay
 
 ## Improvement
 
-1. Use `ms` phonemizer and Malaya Speech normalizer, [melo/text/malay.py](melo/text/malay.py).
+1. Use `ms` phonemizer and Malaya Speech normalizer, [melo/text/malay.py](melo/text/malay.py),
+
+```python
+text = 'hello nama saya.'
+text = text_normalize(text)
+phones, tones, word2ph = g2p(text)
+"""
+(['_',
+'h',
+'ˈɛ',
+'l',
+'o',
+'n',
+'ˈa',
+'m',
+'ə',
+'s',
+'ˈa',
+'j',
+'ə',
+'.',
+'_'],
+[0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0],
+[1, 4, 4, 4, 1, 1])
+"""
+```
+
 2. Use Pretrained Malaysian BERT, [melo/text/malay_bert.py](melo/text/malay_bert.py).
 3. Extend symbols, [melo/text/symbols.py](melo/text/symbols.py).
-4. Use the official pretrained models after that extend the embedding size, [melo/train.py](melo/train.py),
+4. Hardcode the size of vocab and tone based on pretrained but use the new size during inference, [melo/models.py](melo/models.py), 
+
+```python
+self.enc_p = TextEncoder(
+    n_vocab if is_eval else 219,
+    inter_channels,
+    hidden_channels,
+    filter_channels,
+    n_heads,
+    n_layers,
+    kernel_size,
+    p_dropout,
+    gin_channels=self.enc_gin_channels,
+    num_languages=num_languages,
+    num_tones=num_tones if is_eval else 16,
+)
+```
+
+5. Use the official pretrained models after that extend the embedding size, [melo/train.py](melo/train.py),
 
 ```python
 utils.load_checkpoint(

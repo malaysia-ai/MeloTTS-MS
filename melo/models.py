@@ -783,6 +783,7 @@ class SynthesizerTrn(nn.Module):
         num_languages=None,
         num_tones=None,
         norm_refenc=False,
+        is_eval=False,
         **kwargs
     ):
         super().__init__()
@@ -818,7 +819,7 @@ class SynthesizerTrn(nn.Module):
         else:
             self.enc_gin_channels = 0
         self.enc_p = TextEncoder(
-            219,
+            n_vocab if is_eval else 219,
             inter_channels,
             hidden_channels,
             filter_channels,
@@ -828,7 +829,7 @@ class SynthesizerTrn(nn.Module):
             p_dropout,
             gin_channels=self.enc_gin_channels,
             num_languages=num_languages,
-            num_tones=16,
+            num_tones=num_tones if is_eval else 16,
         )
 
         self.dec = Generator(
