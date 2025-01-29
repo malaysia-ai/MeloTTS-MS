@@ -5,6 +5,11 @@ from .japanese import distribute_phone
 
 model_id = os.environ.get('MODEL_ID', 'mesolitica/bert-base-standard-bahasa-cased')
 
+_punctuation = "!'(),.:;? "
+_special = '-'
+_letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+combine = _punctuation + _special + _letters
+
 @cache
 def get_tokenizer():
     tokenizer = AutoTokenizer.from_pretrained(model_id)
@@ -17,23 +22,13 @@ def get_normalizer():
     normalizer = load_text_ids(pad_to = None, understand_punct = True, is_lower = False)
     return normalizer
 
-@cache
-def get_phonemizer():
-    import phonemizer
-    from phonemizer.separator import Separator
-
-    global_phonemizer = phonemizer.backend.EspeakBackend(language='ms', preserve_punctuation=True,  with_stress=True)
-    separator = Separator(phone='-', word='|')
-
-    return global_phonemizer, separator
-
 def text_normalize(text):
     normalizer = get_normalizer()
     t, ids = normalizer.normalize(text, add_fullstop = True)
     return t
 
 def g2p(text, pad_start_end=True, tokenized=None):
-    global_phonemizer, separator = get_phonemizer()
+    text = ''.join([c for c in text if c in combine])
     if tokenized is None:
         tokenizer = get_tokenizer()
         tokenized = tokenizer.tokenize(text)
@@ -52,17 +47,14 @@ def g2p(text, pad_start_end=True, tokenized=None):
         w = "".join(group)
         phone_len = 0
         word_len = len(group)
-        r = global_phonemizer.phonemize([w], separator = separator)[0].replace('|', '')
-        splitted = r.split('-')
-        for s in splitted:
-            if len(s):
-                phones.append(s)
-                if 'ˈ' in s:
-                    t = 1
-                else:
-                    t = 0
-                tones.append(t)
+        for c in w:
+            if len(c):
+                phones.append(c)
+                tones.append(0)
                 phone_len += 1
+        phones.append(' ')
+        tones.append(0)
+        phone_len += 1
         aaa = distribute_phone(phone_len, word_len)
         word2ph += aaa
 

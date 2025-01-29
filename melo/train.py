@@ -185,7 +185,7 @@ def run():
         net_g.module.enc_p.emb = net_g.module.get_resized_embeddings(old_embeddings, len(symbols))
 
         old_embeddings = net_g.module.enc_p.tone_emb
-        net_g.module.enc_p.tone_emb = net_g.module.get_resized_embeddings(old_embeddings, 18)
+        net_g.module.enc_p.tone_emb = net_g.module.get_resized_embeddings(old_embeddings, hps.num_tones)
 
         print(net_g.module.enc_p.emb.weight.shape, net_g.module.enc_p.tone_emb.weight.shape)
 
