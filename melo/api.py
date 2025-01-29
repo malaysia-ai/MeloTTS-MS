@@ -83,6 +83,7 @@ class TTS(nn.Module):
 
     def tts_to_file(self, text, speaker_id, output_path=None, sdp_ratio=0.2, noise_scale=0.6, noise_scale_w=0.8, speed=1.0, pbar=None, format=None, position=None, quiet=False, split=False):
         language = self.language
+        dtype = self.model.enc_p.emb.weight.dtype
         if split:
             texts = self.split_sentences_into_pieces(text, language, quiet)
         else:
@@ -106,8 +107,8 @@ class TTS(nn.Module):
                 x_tst = phones.to(device).unsqueeze(0)
                 tones = tones.to(device).unsqueeze(0)
                 lang_ids = lang_ids.to(device).unsqueeze(0)
-                bert = bert.to(device).unsqueeze(0)
-                ja_bert = ja_bert.to(device).unsqueeze(0)
+                bert = bert.to(dtype).to(device).unsqueeze(0)
+                ja_bert = ja_bert.to(dtype).to(device).unsqueeze(0)
                 x_tst_lengths = torch.LongTensor([phones.size(0)]).to(device)
                 del phones
                 speakers = torch.LongTensor([speaker_id]).to(device)
