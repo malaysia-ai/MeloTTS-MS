@@ -52,9 +52,6 @@ def g2p(text, pad_start_end=True, tokenized=None):
                 phones.append(c)
                 tones.append(0)
                 phone_len += 1
-        phones.append(' ')
-        tones.append(0)
-        phone_len += 1
         aaa = distribute_phone(phone_len, word_len)
         word2ph += aaa
 
