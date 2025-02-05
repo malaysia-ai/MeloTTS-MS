@@ -7,9 +7,7 @@
 Original README at https://github.com/myshell-ai/MeloTTS
 
 ## Introduction
-MeloTTS MS is a forked of https://github.com/myshell-ai/MeloTTS to support Malay language, models and checkpoints with optimizer states released at https://huggingface.co/mesolitica/MeloTTS-MS
-
-We also support phonemeless training, means the model trained purely on character level, go to `char` branch, models and checkpoints with optimizer states released at https://huggingface.co/mesolitica/MeloTTS-MS-Char
+MeloTTS MS is a forked of https://github.com/myshell-ai/MeloTTS to support Malay language, models and checkpoints with optimizer states released at https://huggingface.co/malaysia-ai/MeloTTS-MS
 
 ## Improvement
 
